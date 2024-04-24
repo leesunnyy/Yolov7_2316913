@@ -16,15 +16,19 @@ from PIL import Image
 from pathlib import Path
 from collections import OrderedDict,namedtuple
 
-#수정
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
-
 
 providers = ['CUDAExecutionProvider', 'CPUExecutionProvider'] if cuda else ['CPUExecutionProvider'] #['AzureExecutionProvider', 'CPUExecutionProvider'] if cuda else ['CPUExecutionProvider']
 session = ort.InferenceSession(w, providers=providers)
 
-tf.compat.disable_v2_behavior()
+
+#수정1
+import tensorflow as tf
+if tf.__version__.startswith('2'):
+    import tensorflow.compat.v1 as tf
+    tf.disable_v2_behavior()
+#여기까지
+
+
 with tf.compat.Session() as sess:
     x = tf.compat.placeholder(tf.float32, [2])
     x2 = tf.square(x)
